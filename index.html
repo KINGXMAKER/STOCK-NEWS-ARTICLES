@@ -3,659 +3,696 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock News Desk</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <title>Stock News Desk | AI Summarizer</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #080808;
+            --panel: #111111;
+            --panel-border: #222222;
+            --accent: #22C55E;
+            --accent-hover: #16a34a;
+            --text: #E5E5E5;
+            --text-muted: #A3A3A3;
+            --danger: #EF4444;
+            --bullish: #22C55E;
+            --bearish: #EF4444;
+            --neutral: #737373;
+            --card-bg: #151515;
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background: #080808;
-            color: #fff;
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            padding: 32px 16px 60px;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.5;
+            padding: 2rem 1rem;
+            max-width: 1000px;
+            margin: 0 auto;
         }
-        .container { max-width: 760px; margin: 0 auto; }
-        /* ── Header ── */
-        .header { text-align: center; margin-bottom: 32px; }
-        .header h1 {
-            font-size: 26px;
-            font-weight: 900;
-            letter-spacing: -0.5px;
-        }
-        .green { color: #22C55E; }
-        .header p {
-            color: #444;
-            font-size: 12px;
-            margin-top: 5px;
+
+        code, pre, .url-text {
             font-family: 'JetBrains Mono', monospace;
         }
-        /* ── Panels ── */
-        .panel {
-            background: #111;
-            border: 1px solid #1e1e1e;
-            border-radius: 14px;
-            padding: 20px;
-            margin-bottom: 16px;
+
+        /* Header & Stats */
+        header {
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
-        .label {
-            font-size: 10px;
-            font-weight: 700;
-            color: #555;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
+
+        .title-group {
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: space-between;
         }
-        .dot {
-            width: 7px;
-            height: 7px;
+
+        h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            background: linear-gradient(to right, #fff, #a3a3a3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stats-bar {
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.75rem;
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-dot {
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            background: #2a2a2a;
-            flex-shrink: 0;
         }
-        .dot.on { background: #22C55E; box-shadow: 0 0 8px rgba(34,197,94,0.6); }
-        /* ── Inputs ── */
-        .api-row { display: flex; gap: 8px; }
-        input[type="password"], input[type="text"] {
-            flex: 1;
-            background: #0a0a0a;
-            border: 1px solid #2a2a2a;
-            border-radius: 8px;
-            color: #fff;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            padding: 10px 14px;
-            outline: none;
-            transition: border-color 0.2s;
+
+        .dot-total { background: #fff; }
+        .dot-bullish { background: var(--bullish); }
+        .dot-bearish { background: var(--bearish); }
+        .dot-neutral { background: var(--neutral); }
+
+        /* Config & Input */
+        .config-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
         }
-        input:focus { border-color: #22C55E; }
-        textarea {
-            width: 100%;
-            background: #0a0a0a;
-            border: 1px solid #2a2a2a;
-            border-radius: 8px;
-            color: #fff;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            padding: 12px 14px;
-            min-height: 130px;
-            resize: vertical;
-            outline: none;
-            line-height: 1.8;
-            transition: border-color 0.2s;
+
+        @media (max-width: 768px) {
+            .config-grid { grid-template-columns: 1fr; }
         }
-        textarea:focus { border-color: #22C55E; }
-        textarea::placeholder { color: #333; }
-        .hint {
-            font-size: 10px;
-            color: #333;
-            margin-top: 8px;
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--panel-border);
+            border-radius: 1rem;
+            padding: 1.5rem;
         }
-        .hint a { color: #22C55E; text-decoration: none; }
-        /* ── Buttons ── */
-        .save-btn {
-            background: #1e1e1e;
-            color: #aaa;
-            border: 1px solid #2a2a2a;
-            border-radius: 8px;
-            padding: 10px 16px;
-            font-size: 12px;
+
+        label {
+            display: block;
+            font-size: 0.75rem;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
         }
-        .save-btn:hover { background: #2a2a2a; color: #fff; }
-        .main-btn {
+
+        .api-input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        input, textarea {
             width: 100%;
-            background: #22C55E;
-            color: #000;
-            border: none;
-            border-radius: 10px;
-            padding: 15px;
-            font-size: 15px;
-            font-weight: 800;
-            cursor: pointer;
-            margin-top: 14px;
-            letter-spacing: 0.3px;
-            transition: all 0.2s;
+            background: #000;
+            border: 1px solid var(--panel-border);
+            border-radius: 0.5rem;
+            color: #fff;
+            padding: 0.75rem;
+            font-size: 0.875rem;
+            transition: var(--transition);
         }
-        .main-btn:hover { background: #16a34a; transform: translateY(-1px); }
-        .main-btn:active { transform: translateY(0); }
-        .main-btn:disabled {
-            background: #1a1a1a;
-            color: #444;
-            cursor: not-allowed;
-            transform: none;
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.1);
         }
-        /* ── Progress ── */
-        .progress-wrap {
-            display: none;
-            background: #111;
-            border: 1px solid #1e1e1e;
-            border-radius: 14px;
-            padding: 20px;
-            margin-bottom: 16px;
-            text-align: center;
-        }
-        .progress-wrap.active { display: block; }
-        .spinner {
-            display: inline-block;
-            width: 22px;
-            height: 22px;
-            border: 2px solid #1e1e1e;
-            border-top-color: #22C55E;
+
+        .api-status {
+            position: absolute;
+            right: 0.75rem;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            animation: spin 0.75s linear infinite;
-            margin-bottom: 10px;
+            background: #333;
+            transition: var(--transition);
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        #progressText {
-            font-size: 12px;
-            color: #666;
+
+        .api-status.saved {
+            background: var(--accent);
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        textarea {
+            height: 120px;
+            resize: vertical;
             font-family: 'JetBrains Mono', monospace;
         }
-        .bar-wrap {
-            background: #1a1a1a;
-            border-radius: 4px;
-            height: 3px;
-            margin: 12px 0 0;
+
+        .actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+            flex: 1;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--panel-border);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* Progress */
+        .progress-container {
+            margin: 1.5rem 0;
+            display: none;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+        }
+
+        .progress-bar-bg {
+            height: 6px;
+            background: #222;
+            border-radius: 3px;
             overflow: hidden;
         }
-        .bar {
+
+        .progress-bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, #16a34a, #22C55E);
-            border-radius: 4px;
-            transition: width 0.4s ease;
+            background: var(--accent);
             width: 0%;
+            transition: width 0.3s ease;
         }
-        /* ── Cards ── */
-        .results { display: flex; flex-direction: column; gap: 14px; }
+
+        /* Results Grid */
+        #results {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
         .card {
-            background: #111;
-            border: 1px solid #1e1e1e;
-            border-radius: 14px;
-            padding: 20px;
-            animation: rise 0.3s ease;
+            background: var(--card-bg);
+            border: 1px solid var(--panel-border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            animation: slideUp 0.4s cubic-bezier(0, 0, 0.2, 1) forwards;
+            opacity: 0;
+            position: relative;
         }
-        @keyframes rise {
-            from { opacity: 0; transform: translateY(10px); }
-            to   { opacity: 1; transform: translateY(0); }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
-        .card-top {
+
+        .card.error {
+            border-color: rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .card-header {
             display: flex;
-            align-items: flex-start;
             justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 14px;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            gap: 1rem;
         }
-        .card-url {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 9px;
-            color: #333;
+
+        .url-text {
+            font-size: 0.75rem;
+            color: var(--text-muted);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            flex: 1;
-            padding-top: 2px;
+            max-width: 70%;
         }
-        .signal {
-            font-size: 9px;
-            font-weight: 800;
-            padding: 3px 9px;
-            border-radius: 5px;
-            white-space: nowrap;
-            letter-spacing: 0.8px;
-            flex-shrink: 0;
+
+        .badge {
+            padding: 0.25rem 0.625rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
         }
-        .BULLISH { background: rgba(34,197,94,0.12); color: #22C55E; border: 1px solid rgba(34,197,94,0.25); }
-        .BEARISH { background: rgba(239,68,68,0.12); color: #EF4444; border: 1px solid rgba(239,68,68,0.25); }
-        .NEUTRAL { background: rgba(245,158,11,0.12); color: #F59E0B; border: 1px solid rgba(245,158,11,0.25); }
+
+        .badge-bullish { background: rgba(34, 197, 94, 0.15); color: var(--bullish); }
+        .badge-bearish { background: rgba(239, 68, 68, 0.15); color: var(--bearish); }
+        .badge-neutral { background: rgba(115, 115, 115, 0.15); color: var(--neutral); }
+
         .card-headline {
-            font-size: 15px;
+            font-size: 1.125rem;
             font-weight: 700;
-            line-height: 1.45;
-            margin-bottom: 10px;
-            color: #f0f0f0;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
         }
+
         .card-tldr {
-            font-size: 12px;
-            color: #777;
-            margin-bottom: 14px;
-            line-height: 1.55;
-            padding: 9px 12px;
-            background: #0d0d0d;
-            border-radius: 7px;
-            border-left: 2px solid #2a2a2a;
+            font-size: 0.875rem;
             font-style: italic;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.03);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--panel-border);
         }
-        .bullets {
+
+        .card-bullets {
             list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 9px;
-            margin-bottom: 16px;
+            margin-bottom: 1.25rem;
         }
-        .bullets li {
-            display: flex;
-            gap: 10px;
-            font-size: 13px;
-            color: #bbb;
-            line-height: 1.5;
+
+        .card-bullets li {
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            padding-left: 1.25rem;
+            position: relative;
         }
-        .arr { color: #22C55E; flex-shrink: 0; font-weight: 700; margin-top: 1px; }
-        .card-footer {
+
+        .card-bullets li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        .card-tags {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-top: 12px;
-            border-top: 1px solid #1a1a1a;
-            gap: 10px;
             flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--panel-border);
         }
-        .tags { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-        .ticker-tag {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 10px;
-            font-weight: 700;
-            color: #22C55E;
-            background: rgba(34,197,94,0.08);
-            border: 1px solid rgba(34,197,94,0.2);
-            padding: 3px 8px;
-            border-radius: 5px;
-        }
-        .sector-tag {
-            font-size: 10px;
-            color: #444;
-            border: 1px solid #1e1e1e;
-            padding: 3px 8px;
-            border-radius: 5px;
-        }
-        .copy-btn {
-            background: transparent;
-            border: 1px solid #2a2a2a;
-            color: #555;
-            padding: 5px 12px;
-            border-radius: 6px;
-            font-size: 11px;
+
+        .tag {
+            font-size: 0.75rem;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            flex-shrink: 0;
+            background: #222;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.25rem;
+            color: var(--text-muted);
         }
-        .copy-btn:hover { border-color: #22C55E; color: #22C55E; }
-        /* ── Error card ── */
-        .error-card {
-            background: rgba(239,68,68,0.04);
-            border-color: rgba(239,68,68,0.15);
+
+        .tag.ticker { color: var(--accent); }
+
+        .copy-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            padding: 0.4rem;
+            border-radius: 0.4rem;
+            background: #222;
+            color: var(--text-muted);
+            display: none; /* Shown on hover */
         }
-        .error-url {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 10px;
-            color: #444;
-            margin-bottom: 8px;
-            word-break: break-all;
+
+        .card:hover .copy-btn { display: flex; }
+
+        .error-msg {
+            color: var(--danger);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
         }
-        .error-msg { color: #EF4444; font-size: 12px; }
-        /* ── Clear btn ── */
-        .clear-btn {
-            background: transparent;
-            border: 1px solid #1e1e1e;
-            color: #444;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-size: 11px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: block;
-            margin: 12px auto 0;
+
+        /* Spinner */
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
         }
-        .clear-btn:hover { border-color: #EF4444; color: #EF4444; }
-        /* ── Summary bar ── */
-        .summary-bar {
-            display: none;
-            background: #0d0d0d;
-            border: 1px solid #1e1e1e;
-            border-radius: 10px;
-            padding: 14px 18px;
-            margin-bottom: 16px;
-            font-size: 12px;
-            color: #555;
-            font-family: 'JetBrains Mono', monospace;
-        }
-        .summary-bar.show { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-        .sb-stat { text-align: center; }
-        .sb-num { font-size: 20px; font-weight: 900; color: #fff; display: block; }
-        .sb-lbl { font-size: 9px; color: #444; letter-spacing: 0.5px; }
-        .sb-bull { color: #22C55E; }
-        .sb-bear { color: #EF4444; }
-        .sb-neu  { color: #F59E0B; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
-</head>
+  </head>
 <body>
-<div class="container">
-    <!-- Header -->
-    <div class="header">
-        <h1>STOCK NEWS <span class="green">DESK</span></h1>
-        <p>paste urls → get instant ai summaries</p>
-    </div>
-    <!-- API Key -->
-    <div class="panel">
-        <div class="label"><span class="dot" id="keyDot"></span>Gemini API Key</div>
-        <div class="api-row">
-            <input type="password" id="apiKey" placeholder="AIzaSy...">
-            <button class="save-btn" onclick="saveKey()">Save Key</button>
+
+    <header>
+        <div class="title-group">
+            <h1>Stock News Desk</h1>
+            <div class="api-status-pill">
+                <div id="apiKeyIndicator" class="api-status"></div>
+            </div>
         </div>
-        <p class="hint">
-            Free key at <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com</a>
-            &nbsp;·&nbsp; Stored only in your browser
-        </p>
-    </div>
-    <!-- URL Input -->
-    <div class="panel">
-        <div class="label">Article URLs — one per line</div>
-        <textarea id="urls" placeholder="https://finance.yahoo.com/news/...
-https://seekingalpha.com/article/...
-https://cnbc.com/2026/02/...
-https://reuters.com/markets/..."></textarea>
-        <p class="hint" style="margin-top:10px;">
-            Works with almost all news sites, including Yahoo Finance, Reuters, CNBC, SeekingAlpha, Barron's, MarketWatch, Bloomberg
-        </p>
-        <button class="main-btn" id="goBtn" onclick="run()">⚡ Summarize All</button>
-    </div>
-    <!-- Progress -->
-    <div class="progress-wrap" id="prog">
-        <div class="spinner"></div>
-        <div id="progressText">Starting...</div>
-        <div class="bar-wrap"><div class="bar" id="bar"></div></div>
-    </div>
-    <!-- Summary Stats Bar -->
-    <div class="summary-bar" id="statsBar">
-        <div class="sb-stat">
-            <span class="sb-num" id="stTotal">0</span>
-            <span class="sb-lbl">ARTICLES</span>
-        </div>
-        <div class="sb-stat">
-            <span class="sb-num sb-bull" id="stBull">0</span>
-            <span class="sb-lbl">BULLISH</span>
-        </div>
-        <div class="sb-stat">
-            <span class="sb-num sb-bear" id="stBear">0</span>
-            <span class="sb-lbl">BEARISH</span>
-        </div>
-        <div class="sb-stat">
-            <span class="sb-num sb-neu" id="stNeu">0</span>
-            <span class="sb-lbl">NEUTRAL</span>
-        </div>
-        <button class="clear-btn" onclick="clearResults()" style="margin:0;">Clear All</button>
-    </div>
-    <!-- Results -->
-    <div class="results" id="results"></div>
-</div>
-<script>
-    // ── Global state ──
-    const summaries = [];
-    // ── Load saved key on boot ──
-    window.onload = () => {
-        const k = localStorage.getItem('sndesk_key');
-        if (k) {
-            document.getElementById('apiKey').value = k;
-            document.getElementById('keyDot').classList.add('on');
-        }
-    };
-    // ── Save key ──
-    function saveKey() {
-        const k = document.getElementById('apiKey').value.trim();
-        if (!k) return;
-        localStorage.setItem('sndesk_key', k);
-        document.getElementById('keyDot').classList.add('on');
-        const btn = document.querySelector('.save-btn');
-        btn.textContent = '✓ Saved';
-        setTimeout(() => { btn.textContent = 'Save Key'; }, 2000);
-    }
-    // Helper to strip HTML tags and get raw text
-    function extractTextFromHTML(html) {
-        if (!html) return "";
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        // Remove junk elements that might clutter the text
-        const exclude = doc.querySelectorAll('script, style, nav, footer, header, aside, .ad, .advertisement, iframe, noscript');
-        exclude.forEach(el => el.remove());
-        const rawText = doc.body ? doc.body.textContent : "";
-        return rawText.replace(/\s+/g, ' ').trim().substring(0, 15000);
-    }
-    // ── Fetch article text with robust fallbacks ──
-    async function fetchArticle(url) {
-        let text = "";
         
-        // Strategy 1: Jina AI Reader (cleanest)
-        try {
-            const res = await fetch("https://r.jina.ai/" + url, {
-                headers: { 'Accept': 'text/plain', 'X-Return-Format': 'text' }
-            });
-            if (res.ok) {
-                text = await res.text();
-                if (text.length > 200 && !text.includes("Just a moment...") && !text.includes("Attention Required!")) {
-                    return text.substring(0, 15000);
-                }
-            }
-        } catch (e) { }
-        // Strategy 2: allOrigins CORS proxy
-        try {
-            const res = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(url));
-            if (res.ok) {
-                const data = await res.json();
-                text = extractTextFromHTML(data.contents);
-                if (text.length > 200) return text;
-            }
-        } catch (e) { }
-        // Strategy 3: CodeTabs proxy
-        try {
-            const res = await fetch("https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(url));
-            if (res.ok) {
-                const html = await res.text();
-                text = extractTextFromHTML(html);
-                if (text.length > 200) return text;
-            }
-        } catch (e) { }
-        throw new Error("Could not extract article. Site may be blocking bots or heavily paywalled.");
-    }
-    
-    // ── Gemini summarize ──
-    async function summarize(articleText, url, key) {
-        const prompt = "You are a professional financial analyst. Analyze this article and return ONLY a valid JSON object. No markdown, no explanation.\n\n" +
-            "Article:\n" + articleText + "\n\n" +
-            "Return this exact structure:\n" +
-            "{\n" +
-            "  \"headline\": \"Sharp 8-12 word headline capturing the core story\",\n" +
-            "  \"tldr\": \"One plain-english sentence — what actually happened and why it matters\",\n" +
-            "  \"bullets\": [\n" +
-            "    \"Specific fact, number, or development #1\",\n" +
-            "    \"Specific fact, number, or development #2\",\n" +
-            "    \"Specific fact, number, or development #3\"\n" +
-            "  ],\n" +
-            "  \"signal\": \"BULLISH or BEARISH or NEUTRAL\",\n" +
-            "  \"tickers\": [\"TICKER1\", \"TICKER2\"],\n" +
-            "  \"sector\": \"Technology / Finance / Energy / Healthcare / Consumer / Real Estate / Industrials / Crypto / Macro / Other\"\n" +
-            "}\n\n" +
-            "Rules:\n" +
-            "- BULLISH = positive news for stocks/markets. BEARISH = negative. NEUTRAL = informational only.\n" +
-            "- tickers: only real stock symbols (e.g. AAPL, SPY). Empty array if none found.\n" +
-            "- bullets: specific, factual — include numbers/percentages if mentioned. No vague summaries.\n" +
-            "- Return ONLY the JSON object.";
-            
-        // Use gemini-1.5-flash standard stable path. The 2.0-flash endpoint can 
-        // return a 404 depending on the API Key region or v1beta rollout status.
-        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + key;
-        
-        const res = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }],
-                generationConfig: { 
-                    temperature: 0.1,
-                    responseMimeType: "application/json" // Native JSON enforcement 🔥
-                }
-            })
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-dot dot-total"></span>
+                <span id="statTotal">0 Total</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-dot dot-bullish"></span>
+                <span id="statBullish">0 Bullish</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-dot dot-bearish"></span>
+                <span id="statBearish">0 Bearish</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-dot dot-neutral"></span>
+                <span id="statNeutral">0 Neutral</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="config-grid">
+            <div class="panel">
+                <label for="apiKey">Gemini API Key</label>
+                <div class="api-input-wrapper">
+                    <input type="password" id="apiKey" placeholder="Enter key..." autocomplete="off">
+                    <div id="apiKeyDot" class="api-status"></div>
+                </div>
+            </div>
+            <div class="panel">
+                <label for="urls">Article URLs (one per line)</label>
+                <textarea id="urls" placeholder="https://www.marketwatch.com/story/...&#10;https://www.cnbc.com/2026/02/23/..."></textarea>
+                <div class="actions">
+                    <button id="summarizeBtn" class="btn-primary">
+                        <span id="btnText">Summarize All</span>
+                    </button>
+                    <button id="clearBtn" class="btn-secondary">Clear All</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="progressSection" class="progress-container">
+            <div class="progress-text">
+                <span id="statusText">Preparing...</span>
+                <span id="progressCount">0/0</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div id="progressBar" class="progress-bar-fill"></div>
+            </div>
+        </div>
+
+        <div id="results"></div>
+    </main>
+
+    <script>
+        const elements = {
+            apiKey: document.getElementById('apiKey'),
+            apiKeyDot: document.getElementById('apiKeyDot'),
+            urls: document.getElementById('urls'),
+            summarizeBtn: document.getElementById('summarizeBtn'),
+            btnText: document.getElementById('btnText'),
+            clearBtn: document.getElementById('clearBtn'),
+            progressSection: document.getElementById('progressSection'),
+            statusText: document.getElementById('statusText'),
+            progressCount: document.getElementById('progressCount'),
+            progressBar: document.getElementById('progressBar'),
+            results: document.getElementById('results'),
+            statTotal: document.getElementById('statTotal'),
+            statBullish: document.getElementById('statBullish'),
+            statBearish: document.getElementById('statBearish'),
+            statNeutral: document.getElementById('statNeutral')
+        };
+
+        let stats = { total: 0, bullish: 0, bearish: 0, neutral: 0 };
+        let isRunning = false;
+
+        // API Key Persistence
+        elements.apiKey.value = localStorage.getItem('gemini_api_key') || '';
+        updateApiStatus();
+
+        elements.apiKey.addEventListener('input', (e) => {
+            localStorage.setItem('gemini_api_key', e.target.value);
+            updateApiStatus();
         });
-        
-        if (!res.ok) throw new Error("API error (" + res.status + ")");
-        
-        const json = await res.json();
-        const raw = json.candidates?.[0]?.content?.parts?.[0]?.text || '';
-        
-        // Cleanup in case JSON string wasn't fully raw format
-        const cleaned = raw.replace(/```json/gi, '').replace(/```/g, '').trim();
-        try {
-            return JSON.parse(cleaned);
-        } catch {
-            throw new Error('AI returned unparseable response — try again');
-        }
-    }
-    
-    // ── Render card ──
-    function renderCard(data, url, idx) {
-        const sig = (data.signal || 'NEUTRAL').toUpperCase();
-        let tickers = "";
-        if (data.tickers && data.tickers.length > 0) {
-            tickers = data.tickers.map(t => "<span class=\"ticker-tag\">$" + t + "</span>").join('');
-        }
-        let html = "<div class=\"card\" id=\"card-" + idx + "\">" +
-            "<div class=\"card-top\">" +
-            "<span class=\"card-url\" title=\"" + url + "\">" + url + "</span>" +
-            "<span class=\"signal " + sig + "\">" + sig + "</span>" +
-            "</div>" +
-            "<div class=\"card-headline\">" + (data.headline || 'Summary') + "</div>";
-        if (data.tldr) {
-            html += "<div class=\"card-tldr\">" + data.tldr + "</div>";
-        }
-        html += "<ul class=\"bullets\">";
-        (data.bullets || []).forEach(b => {
-             html += "<li><span class=\"arr\">▸</span><span>" + b + "</span></li>";
-        });
-        html += "</ul>";
-        html += "<div class=\"card-footer\">" +
-            "<div class=\"tags\">" +
-            (tickers ? tickers : "<span style=\"color:#2a2a2a;font-size:10px;\">no tickers</span>") +
-            (data.sector ? "<span class=\"sector-tag\">" + data.sector + "</span>" : "") +
-            "</div>" +
-            "<button class=\"copy-btn\" onclick=\"copyResult(" + idx + ", this)\">Copy</button>" +
-            "</div>" +
-            "</div>";
-            
-        return html;
-    }
-    // ── Render error ──
-    function renderError(url, msg) {
-        return "<div class=\"card error-card\">" +
-            "<div class=\"error-url\">" + url + "</div>" +
-            "<div class=\"error-msg\">⚠ " + msg + "</div>" +
-            "</div>";
-    }
-    // ── Copy result ──
-    function copyResult(idx, btn) {
-        const d = summaries[idx];
-        if (!d) return;
-        
-        let textParts = [
-            d.headline,
-            '',
-            "Signal: " + d.signal + "  |  Sector: " + d.sector
-        ];
-        
-        if (d.tickers && d.tickers.length > 0) {
-            textParts.push("Tickers: " + d.tickers.map(t => '$' + t).join(', '));
-        }
-        
-        textParts.push('');
-        textParts.push(d.tldr);
-        textParts.push('');
-        
-        (d.bullets || []).forEach((b, i) => {
-            textParts.push((i + 1) + ". " + b);
-        });
-        const textToCopy = textParts.join('\n');
-        navigator.clipboard.writeText(textToCopy).then(() => {
-            btn.textContent = '✓ Copied';
-            setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
-        });
-    }
-    // ── Clear results ──
-    function clearResults() {
-        document.getElementById('results').innerHTML = '';
-        document.getElementById('statsBar').classList.remove('show');
-        summaries.length = 0;
-    }
-    // ── Update stats bar ──
-    function updateStats() {
-        const total = summaries.filter(s => s).length;
-        const bull  = summaries.filter(s => s && s.signal === 'BULLISH').length;
-        const bear  = summaries.filter(s => s && s.signal === 'BEARISH').length;
-        const neu   = summaries.filter(s => s && s.signal === 'NEUTRAL').length;
-        
-        document.getElementById('stTotal').textContent = total;
-        document.getElementById('stBull').textContent  = bull;
-        document.getElementById('stBear').textContent  = bear;
-        document.getElementById('stNeu').textContent   = neu;
-        
-        if (total > 0) {
-            document.getElementById('statsBar').classList.add('show');
-        }
-    }
-    // ── Main run ──
-    async function run() {
-        const key = localStorage.getItem('sndesk_key');
-        if (!key) { alert('Paste your Gemini API key and hit Save Key first.'); return; }
-        const raw = document.getElementById('urls').value.trim();
-        if (!raw) { alert('Paste at least one URL.'); return; }
-        const urls = raw.split('\n')
-            .map(u => u.trim())
-            .filter(u => u.startsWith('http'));
-        if (!urls.length) { alert('No valid URLs found. Each line should start with http.'); return; }
-        // Reset UI
-        const btn      = document.getElementById('goBtn');
-        const prog     = document.getElementById('prog');
-        const progText = document.getElementById('progressText');
-        const bar      = document.getElementById('bar');
-        const results  = document.getElementById('results');
-        btn.disabled = true;
-        prog.classList.add('active');
-        results.innerHTML = '';
-        summaries.length = 0;
-        document.getElementById('statsBar').classList.remove('show');
-        bar.style.width = '0%';
-        for (let i = 0; i < urls.length; i++) {
-            const url = urls[i];
-            const pct = Math.round(((i + 1) / urls.length) * 100);
-            progText.textContent = "[" + (i + 1) + "/" + urls.length + "] Fetching article...";
-            try {
-                const text = await fetchArticle(url);
-                progText.textContent = "[" + (i + 1) + "/" + urls.length + "] Analyzing with AI...";
-                const data = await summarize(text, url, key);
-                summaries.push(data);
-                results.insertAdjacentHTML('beforeend', renderCard(data, url, summaries.length - 1));
-            } catch (err) {
-                console.error(err);
-                if (err.message.includes('400')) {
-                    err.message = "Check API key limit - " + err.message;
-                }
-                summaries.push(null);
-                results.insertAdjacentHTML('beforeend', renderError(url, err.message));
+
+        function updateApiStatus() {
+            if (elements.apiKey.value.trim().length > 10) {
+                elements.apiKeyDot.classList.add('saved');
+            } else {
+                elements.apiKeyDot.classList.remove('saved');
             }
-            
-            bar.style.width = pct + '%';
+        }
+
+        // Action Handlers
+        elements.clearBtn.addEventListener('click', () => {
+            if (isRunning) return;
+            elements.results.innerHTML = '';
+            stats = { total: 0, bullish: 0, bearish: 0, neutral: 0 };
             updateStats();
-            if (i < urls.length - 1) {
-                await new Promise(r => setTimeout(r, 600));
+        });
+
+        elements.summarizeBtn.addEventListener('click', processUrls);
+
+        async function processUrls() {
+            const key = elements.apiKey.value.trim();
+            const urlInput = elements.urls.value.trim();
+            
+            if (!key) return alert('Please enter your Gemini API key.');
+            if (!urlInput) return alert('Please enter at least one URL.');
+
+            const urlList = urlInput.split('\n').map(u => u.trim()).filter(u => u.length > 0);
+            if (urlList.length === 0) return;
+
+            isRunning = true;
+            elements.summarizeBtn.disabled = true;
+            elements.progressSection.style.display = 'block';
+            
+            for (let i = 0; i < urlList.length; i++) {
+                const url = urlList[i];
+                updateProgress(i + 1, urlList.length, `Fetching: ${url}`);
+                
+                try {
+                    const content = await fetchArticle(url);
+                    if (content.length < 200) throw new Error('Insufficient content fetched.');
+
+                    updateProgress(i + 1, urlList.length, `Analyzing with Gemini...`);
+                    const summary = await summarizeWithGemini(content, key);
+                    
+                    addCard(url, summary);
+                } catch (err) {
+                    console.error(err);
+                    addErrorCard(url, err.message);
+                }
             }
+
+            isRunning = false;
+            elements.summarizeBtn.disabled = false;
+            elements.statusText.innerText = 'Completed';
+            elements.progressBar.style.width = '100%';
         }
-        bar.style.width = '100%';
-        progText.textContent = "✓ Done — " + urls.length + " article" + (urls.length > 1 ? "s" : "") + " processed";
-        btn.disabled = false;
-    }
-</script>
+
+        function updateProgress(current, total, text) {
+            elements.statusText.innerText = text;
+            elements.progressCount.innerText = `${current}/${total}`;
+            elements.progressBar.style.width = `${(current / total) * 100}%`;
+        }
+
+        function updateStats() {
+            elements.statTotal.innerText = `${stats.total} Total`;
+            elements.statBullish.innerText = `${stats.bullish} Bullish`;
+            elements.statBearish.innerText = `${stats.bearish} Bearish`;
+            elements.statNeutral.innerText = `${stats.neutral} Neutral`;
+        }
+
+        async function fetchArticle(url) {
+            // Strategy 1: Jina.ai
+            try {
+                const res = await fetch(`https://r.jina.ai/${url}`, { headers: { 'Accept': 'text/plain' } });
+                if (res.ok) {
+                    const text = await res.text();
+                    if (text.length > 200) return text;
+                }
+            } catch (e) {}
+
+            // Strategy 2: AllOrigins Proxy
+            try {
+                const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    const text = extractTextFromHtml(data.contents);
+                    if (text.length > 200) return text;
+                }
+            } catch (e) {}
+
+            // Strategy 3: CodeTabs Proxy
+            try {
+                const res = await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`);
+                if (res.ok) {
+                    const html = await res.text();
+                    const text = extractTextFromHtml(html);
+                    if (text.length > 200) return text;
+                }
+            } catch (e) {}
+
+            throw new Error('Could not fetch article content from any source.');
+        }
+
+        function extractTextFromHtml(html) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            // Remove noise
+            const selectors = ['script', 'style', 'nav', 'footer', 'header', 'aside', '.ad', '.sidebar'];
+            selectors.forEach(s => {
+                doc.querySelectorAll(s).forEach(el => el.remove());
+            });
+
+            return doc.body.innerText.replace(/\s+/g, ' ').trim();
+        }
+
+        async function summarizeWithGemini(text, key) {
+            const prompt = `Analyze this stock news article and return ONLY a JSON object (no markdown, no backticks).
+            JSON schema: { "headline": "string", "tldr": "string", "bullets": ["string", "string", "string"], "signal": "BULLISH"|"BEARISH"|"NEUTRAL", "tickers": ["string"], "sector": "string" }
+            Article content: ${text.substring(0, 15000)}`;
+
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`;
+            
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }],
+                    generationConfig: { temperature: 0.1 }
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error?.message || 'Gemini API call failed.');
+            }
+
+            const data = await response.json();
+            const rawText = data.candidates[0].content.parts[0].text;
+            
+            // Clean up possible markdown wrappers if Gemini ignores instructions
+            const jsonStr = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
+            return JSON.parse(jsonStr);
+        }
+
+        function addCard(url, summary) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            const signalClass = `badge-${summary.signal.toLowerCase()}`;
+            
+            card.innerHTML = `
+                <div class="card-header">
+                    <span class="url-text" title="${url}">${url}</span>
+                    <span class="badge ${signalClass}">${summary.signal}</span>
+                </div>
+                <button class="copy-btn" onclick="copyCard(this)" title="Copy JSON">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
+                <div class="card-headline">${summary.headline}</div>
+                <div class="card-tldr">${summary.tldr}</div>
+                <ul class="card-bullets">
+                    ${summary.bullets.map(b => `<li>${b}</li>`).join('')}
+                </ul>
+                <div class="card-tags">
+                    ${summary.tickers.map(t => `<span class="tag ticker">${t}</span>`).join('')}
+                    <span class="tag">${summary.sector}</span>
+                </div>
+            `;
+
+            elements.results.prepend(card);
+            
+            stats.total++;
+            if (summary.signal === 'BULLISH') stats.bullish++;
+            else if (summary.signal === 'BEARISH') stats.bearish++;
+            else stats.neutral++;
+            updateStats();
+        }
+
+        function addErrorCard(url, message) {
+            const card = document.createElement('div');
+            card.className = 'card error';
+            card.innerHTML = `
+                <div class="card-header">
+                    <span class="url-text" title="${url}">${url}</span>
+                    <span class="badge badge-bearish">ERROR</span>
+                </div>
+                <div class="card-headline">Failed to process article</div>
+                <div class="error-msg">${message}</div>
+            `;
+            elements.results.prepend(card);
+            stats.total++;
+            updateStats();
+        }
+
+        function copyCard(btn) {
+            const card = btn.closest('.card');
+            const data = {
+                headline: card.querySelector('.card-headline').innerText,
+                tldr: card.querySelector('.card-tldr').innerText,
+                bullets: Array.from(card.querySelectorAll('.card-bullets li')).map(li => li.innerText),
+                signal: card.querySelector('.badge').innerText,
+                tickers: Array.from(card.querySelectorAll('.tag.ticker')).map(t => t.innerText),
+                sector: card.querySelector('.card-tags span:last-child').innerText
+            };
+            navigator.clipboard.writeText(JSON.stringify(data, null, 2));
+            
+            const originalSvg = btn.innerHTML;
+            btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+            setTimeout(() => btn.innerHTML = originalSvg, 2000);
+        }
+    </script>
 </body>
 </html>
