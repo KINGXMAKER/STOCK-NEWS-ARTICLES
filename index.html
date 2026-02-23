@@ -407,6 +407,8 @@
 
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
+    <!-- CRITICAL: DO NOT REMOVE/MODIFY THIS COMMENT OR THE SCRIPT BELOW -->
+    <script src="https://blink.new/auto-engineer.js?projectId=stock-news-desk-s3pb4d97" type="module"></script>
   </head>
 <body>
 
@@ -450,10 +452,11 @@
             <div class="panel">
                 <label for="geminiModel">Gemini Model</label>
                 <select id="geminiModel">
-                    <option value="gemini-1.5-flash" selected>gemini-1.5-flash (Standard)</option>
-                    <option value="gemini-2.0-flash-exp">gemini-2.0-flash-exp (Experimental)</option>
-                    <option value="gemini-2.0-pro-exp-02-05">gemini-2.0-pro-exp (Latest Pro)</option>
-                    <option value="gemini-1.5-pro">gemini-1.5-pro (Stable Pro)</option>
+                    <option value="gemini-3.9-flash" selected>gemini-3.9-flash (Latest)</option>
+                    <option value="gemini-2.5-flash">gemini-2.5-flash (Next Gen)</option>
+                    <option value="gemini-2.0-flash">gemini-2.0-flash (Current)</option>
+                    <option value="gemini-1.5-flash">gemini-1.5-flash (Legacy)</option>
+                    <option value="gemini-pro">gemini-pro</option>
                 </select>
             </div>
             <div class="panel">
@@ -506,7 +509,7 @@
 
         // Settings Persistence
         elements.apiKey.value = localStorage.getItem('gemini_api_key') || '';
-        elements.geminiModel.value = localStorage.getItem('gemini_model') || 'gemini-1.5-flash';
+        elements.geminiModel.value = localStorage.getItem('gemini_model') || 'gemini-3.9-flash';
         updateApiStatus();
 
         elements.apiKey.addEventListener('input', (e) => {
