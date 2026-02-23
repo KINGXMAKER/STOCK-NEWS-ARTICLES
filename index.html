@@ -1,20 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock News Desk</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: #080808;
             color: #fff;
@@ -22,35 +14,21 @@
             min-height: 100vh;
             padding: 32px 16px 60px;
         }
-
-        .container {
-            max-width: 760px;
-            margin: 0 auto;
-        }
-
+        .container { max-width: 760px; margin: 0 auto; }
         /* ── Header ── */
-        .header {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-
+        .header { text-align: center; margin-bottom: 32px; }
         .header h1 {
             font-size: 26px;
             font-weight: 900;
             letter-spacing: -0.5px;
         }
-
-        .green {
-            color: #22C55E;
-        }
-
+        .green { color: #22C55E; }
         .header p {
             color: #444;
             font-size: 12px;
             margin-top: 5px;
             font-family: 'JetBrains Mono', monospace;
         }
-
         /* ── Panels ── */
         .panel {
             background: #111;
@@ -59,7 +37,6 @@
             padding: 20px;
             margin-bottom: 16px;
         }
-
         .label {
             font-size: 10px;
             font-weight: 700;
@@ -71,7 +48,6 @@
             align-items: center;
             gap: 6px;
         }
-
         .dot {
             width: 7px;
             height: 7px;
@@ -79,20 +55,10 @@
             background: #2a2a2a;
             flex-shrink: 0;
         }
-
-        .dot.on {
-            background: #22C55E;
-            box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
-        }
-
+        .dot.on { background: #22C55E; box-shadow: 0 0 8px rgba(34,197,94,0.6); }
         /* ── Inputs ── */
-        .api-row {
-            display: flex;
-            gap: 8px;
-        }
-
-        input[type="password"],
-        input[type="text"] {
+        .api-row { display: flex; gap: 8px; }
+        input[type="password"], input[type="text"] {
             flex: 1;
             background: #0a0a0a;
             border: 1px solid #2a2a2a;
@@ -104,11 +70,7 @@
             outline: none;
             transition: border-color 0.2s;
         }
-
-        input:focus {
-            border-color: #22C55E;
-        }
-
+        input:focus { border-color: #22C55E; }
         textarea {
             width: 100%;
             background: #0a0a0a;
@@ -124,26 +86,14 @@
             line-height: 1.8;
             transition: border-color 0.2s;
         }
-
-        textarea:focus {
-            border-color: #22C55E;
-        }
-
-        textarea::placeholder {
-            color: #333;
-        }
-
+        textarea:focus { border-color: #22C55E; }
+        textarea::placeholder { color: #333; }
         .hint {
             font-size: 10px;
             color: #333;
             margin-top: 8px;
         }
-
-        .hint a {
-            color: #22C55E;
-            text-decoration: none;
-        }
-
+        .hint a { color: #22C55E; text-decoration: none; }
         /* ── Buttons ── */
         .save-btn {
             background: #1e1e1e;
@@ -157,12 +107,7 @@
             transition: all 0.2s;
             white-space: nowrap;
         }
-
-        .save-btn:hover {
-            background: #2a2a2a;
-            color: #fff;
-        }
-
+        .save-btn:hover { background: #2a2a2a; color: #fff; }
         .main-btn {
             width: 100%;
             background: #22C55E;
@@ -177,23 +122,14 @@
             letter-spacing: 0.3px;
             transition: all 0.2s;
         }
-
-        .main-btn:hover {
-            background: #16a34a;
-            transform: translateY(-1px);
-        }
-
-        .main-btn:active {
-            transform: translateY(0);
-        }
-
+        .main-btn:hover { background: #16a34a; transform: translateY(-1px); }
+        .main-btn:active { transform: translateY(0); }
         .main-btn:disabled {
             background: #1a1a1a;
             color: #444;
             cursor: not-allowed;
             transform: none;
         }
-
         /* ── Progress ── */
         .progress-wrap {
             display: none;
@@ -204,11 +140,7 @@
             margin-bottom: 16px;
             text-align: center;
         }
-
-        .progress-wrap.active {
-            display: block;
-        }
-
+        .progress-wrap.active { display: block; }
         .spinner {
             display: inline-block;
             width: 22px;
@@ -219,19 +151,12 @@
             animation: spin 0.75s linear infinite;
             margin-bottom: 10px;
         }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
+        @keyframes spin { to { transform: rotate(360deg); } }
         #progressText {
             font-size: 12px;
             color: #666;
             font-family: 'JetBrains Mono', monospace;
         }
-
         .bar-wrap {
             background: #1a1a1a;
             border-radius: 4px;
@@ -239,7 +164,6 @@
             margin: 12px 0 0;
             overflow: hidden;
         }
-
         .bar {
             height: 100%;
             background: linear-gradient(90deg, #16a34a, #22C55E);
@@ -247,14 +171,8 @@
             transition: width 0.4s ease;
             width: 0%;
         }
-
         /* ── Cards ── */
-        .results {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
+        .results { display: flex; flex-direction: column; gap: 14px; }
         .card {
             background: #111;
             border: 1px solid #1e1e1e;
@@ -262,19 +180,10 @@
             padding: 20px;
             animation: rise 0.3s ease;
         }
-
         @keyframes rise {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
-
         .card-top {
             display: flex;
             align-items: flex-start;
@@ -282,7 +191,6 @@
             gap: 10px;
             margin-bottom: 14px;
         }
-
         .card-url {
             font-family: 'JetBrains Mono', monospace;
             font-size: 9px;
@@ -293,7 +201,6 @@
             flex: 1;
             padding-top: 2px;
         }
-
         .signal {
             font-size: 9px;
             font-weight: 800;
@@ -303,25 +210,9 @@
             letter-spacing: 0.8px;
             flex-shrink: 0;
         }
-
-        .BULLISH {
-            background: rgba(34, 197, 94, 0.12);
-            color: #22C55E;
-            border: 1px solid rgba(34, 197, 94, 0.25);
-        }
-
-        .BEARISH {
-            background: rgba(239, 68, 68, 0.12);
-            color: #EF4444;
-            border: 1px solid rgba(239, 68, 68, 0.25);
-        }
-
-        .NEUTRAL {
-            background: rgba(245, 158, 11, 0.12);
-            color: #F59E0B;
-            border: 1px solid rgba(245, 158, 11, 0.25);
-        }
-
+        .BULLISH { background: rgba(34,197,94,0.12); color: #22C55E; border: 1px solid rgba(34,197,94,0.25); }
+        .BEARISH { background: rgba(239,68,68,0.12); color: #EF4444; border: 1px solid rgba(239,68,68,0.25); }
+        .NEUTRAL { background: rgba(245,158,11,0.12); color: #F59E0B; border: 1px solid rgba(245,158,11,0.25); }
         .card-headline {
             font-size: 15px;
             font-weight: 700;
@@ -329,7 +220,6 @@
             margin-bottom: 10px;
             color: #f0f0f0;
         }
-
         .card-tldr {
             font-size: 12px;
             color: #777;
@@ -341,7 +231,6 @@
             border-left: 2px solid #2a2a2a;
             font-style: italic;
         }
-
         .bullets {
             list-style: none;
             display: flex;
@@ -349,7 +238,6 @@
             gap: 9px;
             margin-bottom: 16px;
         }
-
         .bullets li {
             display: flex;
             gap: 10px;
@@ -357,14 +245,7 @@
             color: #bbb;
             line-height: 1.5;
         }
-
-        .arr {
-            color: #22C55E;
-            flex-shrink: 0;
-            font-weight: 700;
-            margin-top: 1px;
-        }
-
+        .arr { color: #22C55E; flex-shrink: 0; font-weight: 700; margin-top: 1px; }
         .card-footer {
             display: flex;
             align-items: center;
@@ -374,25 +255,17 @@
             gap: 10px;
             flex-wrap: wrap;
         }
-
-        .tags {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
+        .tags { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
         .ticker-tag {
             font-family: 'JetBrains Mono', monospace;
             font-size: 10px;
             font-weight: 700;
             color: #22C55E;
-            background: rgba(34, 197, 94, 0.08);
-            border: 1px solid rgba(34, 197, 94, 0.2);
+            background: rgba(34,197,94,0.08);
+            border: 1px solid rgba(34,197,94,0.2);
             padding: 3px 8px;
             border-radius: 5px;
         }
-
         .sector-tag {
             font-size: 10px;
             color: #444;
@@ -400,7 +273,6 @@
             padding: 3px 8px;
             border-radius: 5px;
         }
-
         .copy-btn {
             background: transparent;
             border: 1px solid #2a2a2a;
@@ -413,18 +285,12 @@
             transition: all 0.2s;
             flex-shrink: 0;
         }
-
-        .copy-btn:hover {
-            border-color: #22C55E;
-            color: #22C55E;
-        }
-
+        .copy-btn:hover { border-color: #22C55E; color: #22C55E; }
         /* ── Error card ── */
         .error-card {
-            background: rgba(239, 68, 68, 0.04);
-            border-color: rgba(239, 68, 68, 0.15);
+            background: rgba(239,68,68,0.04);
+            border-color: rgba(239,68,68,0.15);
         }
-
         .error-url {
             font-family: 'JetBrains Mono', monospace;
             font-size: 10px;
@@ -432,12 +298,7 @@
             margin-bottom: 8px;
             word-break: break-all;
         }
-
-        .error-msg {
-            color: #EF4444;
-            font-size: 12px;
-        }
-
+        .error-msg { color: #EF4444; font-size: 12px; }
         /* ── Clear btn ── */
         .clear-btn {
             background: transparent;
@@ -451,12 +312,7 @@
             display: block;
             margin: 12px auto 0;
         }
-
-        .clear-btn:hover {
-            border-color: #EF4444;
-            color: #EF4444;
-        }
-
+        .clear-btn:hover { border-color: #EF4444; color: #EF4444; }
         /* ── Summary bar ── */
         .summary-bar {
             display: none;
@@ -469,403 +325,337 @@
             color: #555;
             font-family: 'JetBrains Mono', monospace;
         }
-
-        .summary-bar.show {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .sb-stat {
-            text-align: center;
-        }
-
-        .sb-num {
-            font-size: 20px;
-            font-weight: 900;
-            color: #fff;
-            display: block;
-        }
-
-        .sb-lbl {
-            font-size: 9px;
-            color: #444;
-            letter-spacing: 0.5px;
-        }
-
-        .sb-bull {
-            color: #22C55E;
-        }
-
-        .sb-bear {
-            color: #EF4444;
-        }
-
-        .sb-neu {
-            color: #F59E0B;
-        }
+        .summary-bar.show { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .sb-stat { text-align: center; }
+        .sb-num { font-size: 20px; font-weight: 900; color: #fff; display: block; }
+        .sb-lbl { font-size: 9px; color: #444; letter-spacing: 0.5px; }
+        .sb-bull { color: #22C55E; }
+        .sb-bear { color: #EF4444; }
+        .sb-neu  { color: #F59E0B; }
     </style>
 </head>
-
 <body>
-    <div class="container">
-
-        <!-- Header -->
-        <div class="header">
-            <h1>STOCK NEWS <span class="green">DESK</span></h1>
-            <p>paste urls → get instant ai summaries</p>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1>STOCK NEWS <span class="green">DESK</span></h1>
+        <p>paste urls → get instant ai summaries</p>
+    </div>
+    <!-- API Key -->
+    <div class="panel">
+        <div class="label"><span class="dot" id="keyDot"></span>Gemini API Key</div>
+        <div class="api-row">
+            <input type="password" id="apiKey" placeholder="AIzaSy...">
+            <button class="save-btn" onclick="saveKey()">Save Key</button>
         </div>
-
-        <!-- API Key -->
-        <div class="panel">
-            <div class="label"><span class="dot" id="keyDot"></span>Gemini API Key</div>
-            <div class="api-row">
-                <input type="password" id="apiKey" placeholder="AIzaSy...">
-                <button class="save-btn" onclick="saveKey()">Save Key</button>
-            </div>
-            <p class="hint">
-                Free key at <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com</a>
-                &nbsp;·&nbsp; Stored only in your browser
-            </p>
-        </div>
-
-        <!-- URL Input -->
-        <div class="panel">
-            <div class="label">Article URLs — one per line</div>
-            <textarea id="urls" placeholder="https://finance.yahoo.com/news/...
+        <p class="hint">
+            Free key at <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com</a>
+            &nbsp;·&nbsp; Stored only in your browser
+        </p>
+    </div>
+    <!-- URL Input -->
+    <div class="panel">
+        <div class="label">Article URLs — one per line</div>
+        <textarea id="urls" placeholder="https://finance.yahoo.com/news/...
 https://seekingalpha.com/article/...
 https://cnbc.com/2026/02/...
 https://reuters.com/markets/..."></textarea>
-            <p class="hint" style="margin-top:10px;">
-                Works with almost all news sites, including Yahoo Finance, Reuters, CNBC, SeekingAlpha, Barron's,
-                MarketWatch, Bloomberg
-            </p>
-            <button class="main-btn" id="goBtn" onclick="run()">⚡ Summarize All</button>
-        </div>
-
-        <!-- Progress -->
-        <div class="progress-wrap" id="prog">
-            <div class="spinner"></div>
-            <div id="progressText">Starting...</div>
-            <div class="bar-wrap">
-                <div class="bar" id="bar"></div>
-            </div>
-        </div>
-
-        <!-- Summary Stats Bar -->
-        <div class="summary-bar" id="statsBar">
-            <div class="sb-stat">
-                <span class="sb-num" id="stTotal">0</span>
-                <span class="sb-lbl">ARTICLES</span>
-            </div>
-            <div class="sb-stat">
-                <span class="sb-num sb-bull" id="stBull">0</span>
-                <span class="sb-lbl">BULLISH</span>
-            </div>
-            <div class="sb-stat">
-                <span class="sb-num sb-bear" id="stBear">0</span>
-                <span class="sb-lbl">BEARISH</span>
-            </div>
-            <div class="sb-stat">
-                <span class="sb-num sb-neu" id="stNeu">0</span>
-                <span class="sb-lbl">NEUTRAL</span>
-            </div>
-            <button class="clear-btn" onclick="clearResults()" style="margin:0;">Clear All</button>
-        </div>
-
-        <!-- Results -->
-        <div class="results" id="results"></div>
-
+        <p class="hint" style="margin-top:10px;">
+            Works with almost all news sites, including Yahoo Finance, Reuters, CNBC, SeekingAlpha, Barron's, MarketWatch, Bloomberg
+        </p>
+        <button class="main-btn" id="goBtn" onclick="run()">⚡ Summarize All</button>
     </div>
-
-    <script>
-        // ── Global state ──
-        const summaries = [];
-
-        // ── Load saved key on boot ──
-        window.onload = () => {
-            const k = localStorage.getItem('sndesk_key');
-            if (k) {
-                document.getElementById('apiKey').value = k;
-                document.getElementById('keyDot').classList.add('on');
-            }
-        };
-
-        // ── Save key ──
-        function saveKey() {
-            const k = document.getElementById('apiKey').value.trim();
-            if (!k) return;
-            localStorage.setItem('sndesk_key', k);
+    <!-- Progress -->
+    <div class="progress-wrap" id="prog">
+        <div class="spinner"></div>
+        <div id="progressText">Starting...</div>
+        <div class="bar-wrap"><div class="bar" id="bar"></div></div>
+    </div>
+    <!-- Summary Stats Bar -->
+    <div class="summary-bar" id="statsBar">
+        <div class="sb-stat">
+            <span class="sb-num" id="stTotal">0</span>
+            <span class="sb-lbl">ARTICLES</span>
+        </div>
+        <div class="sb-stat">
+            <span class="sb-num sb-bull" id="stBull">0</span>
+            <span class="sb-lbl">BULLISH</span>
+        </div>
+        <div class="sb-stat">
+            <span class="sb-num sb-bear" id="stBear">0</span>
+            <span class="sb-lbl">BEARISH</span>
+        </div>
+        <div class="sb-stat">
+            <span class="sb-num sb-neu" id="stNeu">0</span>
+            <span class="sb-lbl">NEUTRAL</span>
+        </div>
+        <button class="clear-btn" onclick="clearResults()" style="margin:0;">Clear All</button>
+    </div>
+    <!-- Results -->
+    <div class="results" id="results"></div>
+</div>
+<script>
+    // ── Global state ──
+    const summaries = [];
+    // ── Load saved key on boot ──
+    window.onload = () => {
+        const k = localStorage.getItem('sndesk_key');
+        if (k) {
+            document.getElementById('apiKey').value = k;
             document.getElementById('keyDot').classList.add('on');
-            const btn = document.querySelector('.save-btn');
-            btn.textContent = '✓ Saved';
-            setTimeout(() => { btn.textContent = 'Save Key'; }, 2000);
         }
-
-        // Helper to strip HTML tags and get raw text
-        function extractTextFromHTML(html) {
-            if (!html) return "";
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            // Remove junk elements that might clutter the text
-            const exclude = doc.querySelectorAll('script, style, nav, footer, header, aside, .ad, .advertisement, iframe, noscript');
-            exclude.forEach(el => el.remove());
-            const rawText = doc.body ? doc.body.textContent : "";
-            return rawText.replace(/\\s+/g, ' ').trim().substring(0, 15000);
-        }
-
-        // ── Fetch article text with robust fallbacks ──
-        async function fetchArticle(url) {
-            let text = "";
-
-            // Strategy 1: Jina AI Reader (cleanest)
-            try {
-                const res = await fetch("https://r.jina.ai/" + url, {
-                    headers: { 'Accept': 'text/plain', 'X-Return-Format': 'text' }
-                });
-                if (res.ok) {
-                    text = await res.text();
-                    if (text.length > 200 && !text.includes("Just a moment...")) {
-                        return text.substring(0, 15000);
-                    }
-                }
-            } catch (e) { }
-
-            // Strategy 2: allOrigins CORS proxy
-            try {
-                const res = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(url));
-                if (res.ok) {
-                    const data = await res.json();
-                    text = extractTextFromHTML(data.contents);
-                    if (text.length > 200) return text;
-                }
-            } catch (e) { }
-
-            // Strategy 3: CodeTabs proxy
-            try {
-                const res = await fetch("https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(url));
-                if (res.ok) {
-                    const html = await res.text();
-                    text = extractTextFromHTML(html);
-                    if (text.length > 200) return text;
-                }
-            } catch (e) { }
-
-            throw new Error("Could not extract article. Site may be blocking bots or heavily paywalled.");
-        }
-
-        // ── Gemini summarize ──
-        async function summarize(articleText, url, key) {
-            const prompt = "You are a professional financial analyst. Analyze this article and return ONLY a valid JSON object. No markdown, no explanation.\\n\\n" +
-                "Article:\\n" + articleText + "\\n\\n" +
-                "Return this exact structure:\\n" +
-                "{\\n" +
-                "  \\\"headline\\\": \\\"Sharp 8-12 word headline capturing the core story\\\",\\n" +
-                "  \\\"tldr\\\": \\\"One plain-english sentence — what actually happened and why it matters\\\",\\n" +
-                "  \\\"bullets\\\": [\\n" +
-                "    \\\"Specific fact, number, or development #1\\\",\\n" +
-                "    \\\"Specific fact, number, or development #2\\\",\\n" +
-                "    \\\"Specific fact, number, or development #3\\\"\\n" +
-                "  ],\\n" +
-                "  \\\"signal\\\": \\\"BULLISH or BEARISH or NEUTRAL\\\",\\n" +
-                "  \\\"tickers\\\": [\\\"TICKER1\\\", \\\"TICKER2\\\"],\\n" +
-                "  \\\"sector\\\": \\\"Technology / Finance / Energy / Healthcare / Consumer / Real Estate / Industrials / Crypto / Macro / Other\\\"\\n" +
-                "}\\n\\n" +
-                "Rules:\\n" +
-                "- BULLISH = positive news for stocks/markets. BEARISH = negative. NEUTRAL = informational only.\\n" +
-                "- tickers: only real stock symbols (e.g. AAPL, SPY). Empty array if none found.\\n" +
-                "- bullets: specific, factual — include numbers/percentages if mentioned. No vague summaries.\\n" +
-                "- Return ONLY the JSON object.";
-
-            const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=" + key;
-
-            const res = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: prompt }] }],
-                    generationConfig: { temperature: 0.1 }
-                })
+    };
+    // ── Save key ──
+    function saveKey() {
+        const k = document.getElementById('apiKey').value.trim();
+        if (!k) return;
+        localStorage.setItem('sndesk_key', k);
+        document.getElementById('keyDot').classList.add('on');
+        const btn = document.querySelector('.save-btn');
+        btn.textContent = '✓ Saved';
+        setTimeout(() => { btn.textContent = 'Save Key'; }, 2000);
+    }
+    // Helper to strip HTML tags and get raw text
+    function extractTextFromHTML(html) {
+        if (!html) return "";
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        // Remove junk elements that might clutter the text
+        const exclude = doc.querySelectorAll('script, style, nav, footer, header, aside, .ad, .advertisement, iframe, noscript');
+        exclude.forEach(el => el.remove());
+        const rawText = doc.body ? doc.body.textContent : "";
+        return rawText.replace(/\s+/g, ' ').trim().substring(0, 15000);
+    }
+    // ── Fetch article text with robust fallbacks ──
+    async function fetchArticle(url) {
+        let text = "";
+        
+        // Strategy 1: Jina AI Reader (cleanest)
+        try {
+            const res = await fetch("https://r.jina.ai/" + url, {
+                headers: { 'Accept': 'text/plain', 'X-Return-Format': 'text' }
             });
-
-            if (!res.ok) {
-                let errMsg = "Gemini API error (" + res.status + ")";
-                try {
-                    const errBody = await res.json();
-                    const detail = errBody?.error?.message;
-                    if (detail) errMsg += ": " + detail;
-                } catch (e) {}
-                throw new Error(errMsg);
+            if (res.ok) {
+                text = await res.text();
+                if (text.length > 200 && !text.includes("Just a moment...") && !text.includes("Attention Required!")) {
+                    return text.substring(0, 15000);
+                }
             }
-            const json = await res.json();
-            const raw = json.candidates?.[0]?.content?.parts?.[0]?.text || '';
-            const cleaned = raw.replace(/\`\`\`json/gi, '').replace(/\`\`\`/g, '').trim();
+        } catch (e) { }
+        // Strategy 2: allOrigins CORS proxy
+        try {
+            const res = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(url));
+            if (res.ok) {
+                const data = await res.json();
+                text = extractTextFromHTML(data.contents);
+                if (text.length > 200) return text;
+            }
+        } catch (e) { }
+        // Strategy 3: CodeTabs proxy
+        try {
+            const res = await fetch("https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(url));
+            if (res.ok) {
+                const html = await res.text();
+                text = extractTextFromHTML(html);
+                if (text.length > 200) return text;
+            }
+        } catch (e) { }
+        throw new Error("Could not extract article. Site may be blocking bots or heavily paywalled.");
+    }
+    
+    // ── Gemini summarize ──
+    async function summarize(articleText, url, key) {
+        const prompt = "You are a professional financial analyst. Analyze this article and return ONLY a valid JSON object. No markdown, no explanation.\n\n" +
+            "Article:\n" + articleText + "\n\n" +
+            "Return this exact structure:\n" +
+            "{\n" +
+            "  \"headline\": \"Sharp 8-12 word headline capturing the core story\",\n" +
+            "  \"tldr\": \"One plain-english sentence — what actually happened and why it matters\",\n" +
+            "  \"bullets\": [\n" +
+            "    \"Specific fact, number, or development #1\",\n" +
+            "    \"Specific fact, number, or development #2\",\n" +
+            "    \"Specific fact, number, or development #3\"\n" +
+            "  ],\n" +
+            "  \"signal\": \"BULLISH or BEARISH or NEUTRAL\",\n" +
+            "  \"tickers\": [\"TICKER1\", \"TICKER2\"],\n" +
+            "  \"sector\": \"Technology / Finance / Energy / Healthcare / Consumer / Real Estate / Industrials / Crypto / Macro / Other\"\n" +
+            "}\n\n" +
+            "Rules:\n" +
+            "- BULLISH = positive news for stocks/markets. BEARISH = negative. NEUTRAL = informational only.\n" +
+            "- tickers: only real stock symbols (e.g. AAPL, SPY). Empty array if none found.\n" +
+            "- bullets: specific, factual — include numbers/percentages if mentioned. No vague summaries.\n" +
+            "- Return ONLY the JSON object.";
+            
+        // Use gemini-1.5-flash standard stable path. The 2.0-flash endpoint can 
+        // return a 404 depending on the API Key region or v1beta rollout status.
+        const apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + key;
+        
+        const res = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: { 
+                    temperature: 0.1,
+                    responseMimeType: "application/json" // Native JSON enforcement 🔥
+                }
+            })
+        });
+        
+        if (!res.ok) throw new Error("API error (" + res.status + ")");
+        
+        const json = await res.json();
+        const raw = json.candidates?.[0]?.content?.parts?.[0]?.text || '';
+        
+        // Cleanup in case JSON string wasn't fully raw format
+        const cleaned = raw.replace(/```json/gi, '').replace(/```/g, '').trim();
+        try {
+            return JSON.parse(cleaned);
+        } catch {
+            throw new Error('AI returned unparseable response — try again');
+        }
+    }
+    
+    // ── Render card ──
+    function renderCard(data, url, idx) {
+        const sig = (data.signal || 'NEUTRAL').toUpperCase();
+        let tickers = "";
+        if (data.tickers && data.tickers.length > 0) {
+            tickers = data.tickers.map(t => "<span class=\"ticker-tag\">$" + t + "</span>").join('');
+        }
+        let html = "<div class=\"card\" id=\"card-" + idx + "\">" +
+            "<div class=\"card-top\">" +
+            "<span class=\"card-url\" title=\"" + url + "\">" + url + "</span>" +
+            "<span class=\"signal " + sig + "\">" + sig + "</span>" +
+            "</div>" +
+            "<div class=\"card-headline\">" + (data.headline || 'Summary') + "</div>";
+        if (data.tldr) {
+            html += "<div class=\"card-tldr\">" + data.tldr + "</div>";
+        }
+        html += "<ul class=\"bullets\">";
+        (data.bullets || []).forEach(b => {
+             html += "<li><span class=\"arr\">▸</span><span>" + b + "</span></li>";
+        });
+        html += "</ul>";
+        html += "<div class=\"card-footer\">" +
+            "<div class=\"tags\">" +
+            (tickers ? tickers : "<span style=\"color:#2a2a2a;font-size:10px;\">no tickers</span>") +
+            (data.sector ? "<span class=\"sector-tag\">" + data.sector + "</span>" : "") +
+            "</div>" +
+            "<button class=\"copy-btn\" onclick=\"copyResult(" + idx + ", this)\">Copy</button>" +
+            "</div>" +
+            "</div>";
+            
+        return html;
+    }
+    // ── Render error ──
+    function renderError(url, msg) {
+        return "<div class=\"card error-card\">" +
+            "<div class=\"error-url\">" + url + "</div>" +
+            "<div class=\"error-msg\">⚠ " + msg + "</div>" +
+            "</div>";
+    }
+    // ── Copy result ──
+    function copyResult(idx, btn) {
+        const d = summaries[idx];
+        if (!d) return;
+        
+        let textParts = [
+            d.headline,
+            '',
+            "Signal: " + d.signal + "  |  Sector: " + d.sector
+        ];
+        
+        if (d.tickers && d.tickers.length > 0) {
+            textParts.push("Tickers: " + d.tickers.map(t => '$' + t).join(', '));
+        }
+        
+        textParts.push('');
+        textParts.push(d.tldr);
+        textParts.push('');
+        
+        (d.bullets || []).forEach((b, i) => {
+            textParts.push((i + 1) + ". " + b);
+        });
+        const textToCopy = textParts.join('\n');
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            btn.textContent = '✓ Copied';
+            setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+        });
+    }
+    // ── Clear results ──
+    function clearResults() {
+        document.getElementById('results').innerHTML = '';
+        document.getElementById('statsBar').classList.remove('show');
+        summaries.length = 0;
+    }
+    // ── Update stats bar ──
+    function updateStats() {
+        const total = summaries.filter(s => s).length;
+        const bull  = summaries.filter(s => s && s.signal === 'BULLISH').length;
+        const bear  = summaries.filter(s => s && s.signal === 'BEARISH').length;
+        const neu   = summaries.filter(s => s && s.signal === 'NEUTRAL').length;
+        
+        document.getElementById('stTotal').textContent = total;
+        document.getElementById('stBull').textContent  = bull;
+        document.getElementById('stBear').textContent  = bear;
+        document.getElementById('stNeu').textContent   = neu;
+        
+        if (total > 0) {
+            document.getElementById('statsBar').classList.add('show');
+        }
+    }
+    // ── Main run ──
+    async function run() {
+        const key = localStorage.getItem('sndesk_key');
+        if (!key) { alert('Paste your Gemini API key and hit Save Key first.'); return; }
+        const raw = document.getElementById('urls').value.trim();
+        if (!raw) { alert('Paste at least one URL.'); return; }
+        const urls = raw.split('\n')
+            .map(u => u.trim())
+            .filter(u => u.startsWith('http'));
+        if (!urls.length) { alert('No valid URLs found. Each line should start with http.'); return; }
+        // Reset UI
+        const btn      = document.getElementById('goBtn');
+        const prog     = document.getElementById('prog');
+        const progText = document.getElementById('progressText');
+        const bar      = document.getElementById('bar');
+        const results  = document.getElementById('results');
+        btn.disabled = true;
+        prog.classList.add('active');
+        results.innerHTML = '';
+        summaries.length = 0;
+        document.getElementById('statsBar').classList.remove('show');
+        bar.style.width = '0%';
+        for (let i = 0; i < urls.length; i++) {
+            const url = urls[i];
+            const pct = Math.round(((i + 1) / urls.length) * 100);
+            progText.textContent = "[" + (i + 1) + "/" + urls.length + "] Fetching article...";
             try {
-                return JSON.parse(cleaned);
-            } catch {
-                throw new Error('AI returned unparseable response — try again');
-            }
-        }
-
-        // ── Render card ──
-        function renderCard(data, url, idx) {
-            const sig = (data.signal || 'NEUTRAL').toUpperCase();
-            let tickers = "";
-            if (data.tickers && data.tickers.length > 0) {
-                tickers = data.tickers.map(t => "<span class=\"ticker-tag\">$" + t + "</span>").join('');
-            }
-
-            let html = "<div class=\"card\" id=\"card-" + idx + "\">" +
-                "<div class=\"card-top\">" +
-                "<span class=\"card-url\" title=\"" + url + "\">" + url + "</span>" +
-                "<span class=\"signal " + sig + "\">" + sig + "</span>" +
-                "</div>" +
-                "<div class=\"card-headline\">" + (data.headline || 'Summary') + "</div>";
-
-            if (data.tldr) {
-                html += "<div class=\"card-tldr\">" + data.tldr + "</div>";
-            }
-
-            html += "<ul class=\"bullets\">";
-            (data.bullets || []).forEach(b => {
-                html += "<li><span class=\"arr\">▸</span><span>" + b + "</span></li>";
-            });
-            html += "</ul>";
-
-            html += "<div class=\"card-footer\">" +
-                "<div class=\"tags\">" +
-                (tickers ? tickers : "<span style=\"color:#2a2a2a;font-size:10px;\">no tickers</span>") +
-                (data.sector ? "<span class=\"sector-tag\">" + data.sector + "</span>" : "") +
-                "</div>" +
-                "<button class=\"copy-btn\" onclick=\"copyResult(" + idx + ", this)\">Copy</button>" +
-                "</div>" +
-                "</div>";
-
-            return html;
-        }
-
-        // ── Render error ──
-        function renderError(url, msg) {
-            return "<div class=\"card error-card\">" +
-                "<div class=\"error-url\">" + url + "</div>" +
-                "<div class=\"error-msg\">⚠ " + msg + "</div>" +
-                "</div>";
-        }
-
-        // ── Copy result ──
-        function copyResult(idx, btn) {
-            const d = summaries[idx];
-            if (!d) return;
-
-            let textParts = [
-                d.headline,
-                '',
-                "Signal: " + d.signal + "  |  Sector: " + d.sector
-            ];
-
-            if (d.tickers && d.tickers.length > 0) {
-                textParts.push("Tickers: " + d.tickers.map(t => '$' + t).join(', '));
-            }
-
-            textParts.push('');
-            textParts.push(d.tldr);
-            textParts.push('');
-
-            (d.bullets || []).forEach((b, i) => {
-                textParts.push((i + 1) + ". " + b);
-            });
-
-            const textToCopy = textParts.join('\\n');
-
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                btn.textContent = '✓ Copied';
-                setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
-            });
-        }
-
-        // ── Clear results ──
-        function clearResults() {
-            document.getElementById('results').innerHTML = '';
-            document.getElementById('statsBar').classList.remove('show');
-            summaries.length = 0;
-        }
-
-        // ── Update stats bar ──
-        function updateStats() {
-            const total = summaries.filter(s => s).length;
-            const bull = summaries.filter(s => s && s.signal === 'BULLISH').length;
-            const bear = summaries.filter(s => s && s.signal === 'BEARISH').length;
-            const neu = summaries.filter(s => s && s.signal === 'NEUTRAL').length;
-
-            document.getElementById('stTotal').textContent = total;
-            document.getElementById('stBull').textContent = bull;
-            document.getElementById('stBear').textContent = bear;
-            document.getElementById('stNeu').textContent = neu;
-
-            if (total > 0) {
-                document.getElementById('statsBar').classList.add('show');
-            }
-        }
-
-        // ── Main run ──
-        async function run() {
-            const key = localStorage.getItem('sndesk_key');
-            if (!key) { alert('Paste your Gemini API key and hit Save Key first.'); return; }
-
-            const raw = document.getElementById('urls').value.trim();
-            if (!raw) { alert('Paste at least one URL.'); return; }
-
-            const urls = raw.split('\\n')
-                .map(u => u.trim())
-                .filter(u => u.startsWith('http'));
-
-            if (!urls.length) { alert('No valid URLs found. Each line should start with http.'); return; }
-
-            // Reset UI
-            const btn = document.getElementById('goBtn');
-            const prog = document.getElementById('prog');
-            const progText = document.getElementById('progressText');
-            const bar = document.getElementById('bar');
-            const results = document.getElementById('results');
-
-            btn.disabled = true;
-            prog.classList.add('active');
-            results.innerHTML = '';
-            summaries.length = 0;
-            document.getElementById('statsBar').classList.remove('show');
-            bar.style.width = '0%';
-
-            for (let i = 0; i < urls.length; i++) {
-                const url = urls[i];
-                const pct = Math.round((i / urls.length) * 100);
-                bar.style.width = pct + '%';
-                progText.textContent = "[" + (i + 1) + "/" + urls.length + "] Fetching article...";
-
-                try {
-                    const text = await fetchArticle(url);
-                    progText.textContent = "[" + (i + 1) + "/" + urls.length + "] Analyzing with AI...";
-                    const data = await summarize(text, url, key);
-                    summaries.push(data);
-                    results.insertAdjacentHTML('beforeend', renderCard(data, url, summaries.length - 1));
-                } catch (err) {
-                    console.error(err);
-                    summaries.push(null);
-                    results.insertAdjacentHTML('beforeend', renderError(url, err.message));
+                const text = await fetchArticle(url);
+                progText.textContent = "[" + (i + 1) + "/" + urls.length + "] Analyzing with AI...";
+                const data = await summarize(text, url, key);
+                summaries.push(data);
+                results.insertAdjacentHTML('beforeend', renderCard(data, url, summaries.length - 1));
+            } catch (err) {
+                console.error(err);
+                if (err.message.includes('400')) {
+                    err.message = "Check API key limit - " + err.message;
                 }
-
-                updateStats();
-                if (i < urls.length - 1) {
-                    await new Promise(r => setTimeout(r, 600));
-                }
+                summaries.push(null);
+                results.insertAdjacentHTML('beforeend', renderError(url, err.message));
             }
-
-            bar.style.width = '100%';
-            progText.textContent = "✓ Done — " + urls.length + " article" + (urls.length > 1 ? "s" : "") + " processed";
-            btn.disabled = false;
+            
+            bar.style.width = pct + '%';
+            updateStats();
+            if (i < urls.length - 1) {
+                await new Promise(r => setTimeout(r, 600));
+            }
         }
-    </script>
+        bar.style.width = '100%';
+        progText.textContent = "✓ Done — " + urls.length + " article" + (urls.length > 1 ? "s" : "") + " processed";
+        btn.disabled = false;
+    }
+</script>
 </body>
-
 </html>
